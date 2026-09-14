@@ -19,29 +19,29 @@ public class Minimax {
     public int minimax(Board board) {
         int value = -3;
         char[][] state = board.getState();
+        char currentPlayer = player(board);
+
         if (board.verifyState(state)) {
-            return 0;
+            return stateValue(board);
         }
 
-        if (player(board) == MAX_PLAYER) {
+        if (currentPlayer == MAX_PLAYER) {
             //Maximize
             value = -2;
             for (int[] a : actions(board)){
-                //value = minimize(value, minimax(result(board,a)));
+                value = maxVal(value, minimax(result(board,a)));
             }
-
             return value;
         }
 
-        if (player(board) == MIN_PLAYER) {
+        if (currentPlayer == MIN_PLAYER) {
             //Minimze
             value = 2;
             for (int[] a : actions(board)){
-                //value = minimize(value, minimax(result(board,a)));
+                value = minVal(value, minimax(result(board,a)));
             }
             return value;
         }
-        //Check player turn
 
         return value;
     }
@@ -60,6 +60,20 @@ public class Minimax {
             }
         }
         return value;
+    }
+
+    public int maxVal(int currVal, int minimaxReturn){
+        if (minimaxReturn > currVal){
+            return minimaxReturn;
+        }
+        return currVal;
+    }
+
+    public int minVal(int currVal, int minimaxReturn){
+        if (minimaxReturn < currVal){
+            return minimaxReturn;
+        }
+        return currVal;
     }
 
     public char player(Board board){
