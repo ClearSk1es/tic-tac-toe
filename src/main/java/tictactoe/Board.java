@@ -158,24 +158,20 @@ public class Board {
         //call every check function, if any of them have a winner, the game is in terminal state
         String winner = checkHorizontal(board);
         if(winner != null){
-            System.out.println("Winner is: " + winner);
             return true;
         }
 
         winner = checkVertical(board);
         if(winner != null){
-            System.out.println("Winner is: " + winner);
             return true;
         }
 
         winner = checkDiagonal(board);
         if(winner != null){
-            System.out.println("Winner is: " + winner);
             return true;
         }
 
         if(checkFullBoard(board)){
-            System.out.println("It's a draw...");
             return true;
         }
         return false;
