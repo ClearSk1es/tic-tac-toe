@@ -7,34 +7,38 @@ public class Minimax {
     Board board;
     private final char MAX_PLAYER = 'X';
     private final char MIN_PLAYER = 'O';
-    char currentPlayer;
 
 
     public Minimax() {
     }
 
-    public Minimax(Board board, char currentPlayer) {
+    public Minimax(Board board) {
         this.board = board;
-        this.currentPlayer = currentPlayer;
     }
 
-    public int minimax(Board board){
+    public int minimax(Board board) {
         int value = -3;
         char[][] state = board.getState();
-        if (board.verifyState(state)){
+        if (board.verifyState(state)) {
             return 0;
         }
 
-        if (currentPlayer == MAX_PLAYER){
+        if (player(board) == MAX_PLAYER) {
             //Maximize
-            int value = -2;
+            value = -2;
+            for (int[] a : actions(board)){
+                //value = minimize(value, minimax(result(board,a)));
+            }
+
             return value;
         }
 
-        if (currentPlayer == MIN_PLAYER){
+        if (player(board) == MIN_PLAYER) {
             //Minimze
-            int value = 2;
-            
+            value = 2;
+            for (int[] a : actions(board)){
+                //value = minimize(value, minimax(result(board,a)));
+            }
             return value;
         }
         //Check player turn
@@ -42,28 +46,27 @@ public class Minimax {
         return value;
     }
 
-
-    public String player(Board board){
-        int maxCounter = 0;
-        int minCounter = 0;
+    public char player(Board board){
+        int xCounter = 0;
+        int oCounter = 0;
         char[][] state = board.getState();
 
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
                 if(state[row][col] != ' '){
                     if(state[row][col] == 'X'){
-                        maxCounter += 1;
+                        xCounter += 1;
                     }
                     else{
-                        minCounter += 1;
+                        oCounter += 1;
                     }
                 }
             }
         }
-        if(maxCounter >= minCounter){
-            return "MAX";
+        if(xCounter > oCounter){
+            return 'O';
         }
-        return "MIN";
+        return 'X';
     }
 
 
@@ -82,19 +85,29 @@ public class Minimax {
                 }
             }
         }
-        //Returns an arraylist populated with the empty possitions and possible actions that can be taken in a board state
+        //Returns an arraylist populated with the empty positions and possible actions that can be taken in a board state
         return possibleActions;
     }
 
-    public char[][] result(Board board, int[] action, char currentPlayer){
+    public Board result(Board board, int[] action){
         char[][] state = board.getState();
+        Board copyBoard = new Board();
 
         //assigning a new value in action-position to presented state
         int row = action[0];
         int column = action[1];
-        state[row][column] = currentPlayer;
+        //create a copy of the evaluating array as to not affect the original one
+        //initialize it with its respective length of rows
+        char[][] copiedState = new char[state.length][];
 
-        return state;
+        //Clone each row in the copiedState array
+        for (int i = 0; i < state.length; i++) {
+            copiedState[i] = state[i].clone();
+        }
+        copiedState[row][column] = player(board);
+
+        copyBoard.copy(copiedState);
+        return copyBoard;
     }
 
     public int stateValue(){

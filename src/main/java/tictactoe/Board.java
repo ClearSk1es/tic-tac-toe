@@ -21,6 +21,10 @@ public class Board {
         this.state[row][col] = currPlayer;
     }
 
+    public void copy(char[][] board){
+        this.state = board;
+    }
+
     //creating board methods
     public void printBoard(char[][] board){
         for (int row = 0; row < 3; row++) {
