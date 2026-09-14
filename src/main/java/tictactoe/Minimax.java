@@ -46,6 +46,22 @@ public class Minimax {
         return value;
     }
 
+    public int stateValue(Board board){
+        int value = 0;
+        char[][] state = board.getState();
+        String winner = board.checkWinner(state);
+
+        if (winner != null){
+            char w = winner.charAt(0);
+            if (w == 'X'){
+                value = 1;
+            } else if (w == 'O') {
+                value = -1;
+            }
+        }
+        return value;
+    }
+
     public char player(Board board){
         int xCounter = 0;
         int oCounter = 0;
@@ -64,11 +80,10 @@ public class Minimax {
             }
         }
         if(xCounter > oCounter){
-            return 'O';
+            return MIN_PLAYER;
         }
-        return 'X';
+        return MAX_PLAYER;
     }
-
 
     public ArrayList<int[]> actions(Board board){
         //Using arraylist as the length of the collection will depend on state
@@ -108,11 +123,6 @@ public class Minimax {
 
         copyBoard.copy(copiedState);
         return copyBoard;
-    }
-
-    public int stateValue(){
-
-        return 0;
     }
 
 }

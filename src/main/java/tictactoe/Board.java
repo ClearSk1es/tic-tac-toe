@@ -13,20 +13,20 @@ public class Board {
 
     }
 
-    public char[][] getState(){
+    public char[][] getState() {
         return this.state;
     }
 
-    public void setState(int row, int col, char currPlayer){
+    public void setState(int row, int col, char currPlayer) {
         this.state[row][col] = currPlayer;
     }
 
-    public void copy(char[][] board){
+    public void copy(char[][] board) {
         this.state = board;
     }
 
     //creating board methods
-    public void printBoard(char[][] board){
+    public void printBoard(char[][] board) {
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
                 System.out.printf(" %c ", board[row][col]);
@@ -42,7 +42,7 @@ public class Board {
         }
     }
 
-    public void moveCursor(int n){
+    public void moveCursor(int n) {
         //going up with cursor to ovewrite previous table
         System.out.print("\u001B[" + n + "A");
     }
@@ -53,7 +53,7 @@ public class Board {
     }
 
     //Checking board terminal states
-    public String checkHorizontal(char[][] board){
+    public String checkHorizontal(char[][] board) {
         String line = "";
 
         for (int row = 0; row < 3; row++) {
@@ -61,11 +61,10 @@ public class Board {
                 line += board[row][col];
             }
             //before advancing to next row, check if current row has 3 of the same value
-            if ("OOO".equals(line)){
+            if ("OOO".equals(line)) {
                 //returning winner
                 return "O";
-            }
-            else if("XXX".equals(line)){
+            } else if ("XXX".equals(line)) {
                 //returning winner
                 return "X";
             }
@@ -75,23 +74,22 @@ public class Board {
         return null;
     }
 
-    public String checkVertical(char[][] board){
+    public String checkVertical(char[][] board) {
         String line = "";
 
         //using while because i want to modify the loop from the exterior
         //because i want to traverse it in reverse of normal way
         int counter = 0;
-        while(counter < 3){
+        while (counter < 3) {
             //traversing only the columns of the 2D array
             for (int row = 0; row < 3; row++) {
                 for (int col = counter; col <= counter; col++) {
                     line += board[row][col];
                 }
             }
-            if ("OOO".equals(line)){
+            if ("OOO".equals(line)) {
                 return "O";
-            }
-            else if("XXX".equals(line)){
+            } else if ("XXX".equals(line)) {
                 return "X";
             }
             line = "";
@@ -101,13 +99,13 @@ public class Board {
         return null;
     }
 
-    public String checkDiagonal(char[][] board){
+    public String checkDiagonal(char[][] board) {
         String leftDia = "";
         String rightDia = "";
 
         //checking left-sided diagonal
         int counter = 0;
-        while(counter < 3){
+        while (counter < 3) {
             //getting every value for left-sided diagonal
             for (int row = counter; row <= counter; row++) {
                 for (int col = counter; col <= counter; col++) {
@@ -116,17 +114,16 @@ public class Board {
             }
             counter++;
         }
-        if ("OOO".equals(leftDia)){
+        if ("OOO".equals(leftDia)) {
             return "O";
-        }
-        else if("XXX".equals(leftDia)){
+        } else if ("XXX".equals(leftDia)) {
             return "X";
         }
 
         //checking right-sided diagonal
         int upCounter = 0;
         int downCounter = 2;
-        while(downCounter >= 0){
+        while (downCounter >= 0) {
             //this counter goes up so the rows go in order
             for (int row = upCounter; row <= upCounter; row++) {
                 //this counter goes in reverse to get the right side diagonal
@@ -137,19 +134,18 @@ public class Board {
             upCounter++;
             downCounter--;
         }
-        if ("OOO".equals(rightDia)){
+        if ("OOO".equals(rightDia)) {
             return "O";
-        }
-        else if("XXX".equals(rightDia)){
+        } else if ("XXX".equals(rightDia)) {
             return "X";
         }
         return null;
     }
 
-    public boolean checkFullBoard(char[][] board){
+    public boolean checkFullBoard(char[][] board) {
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
-                if (board[row][col] == ' '){
+                if (board[row][col] == ' ') {
                     return false;
                 }
             }
@@ -158,27 +154,48 @@ public class Board {
     }
 
     //verify if state is terminal
-    public boolean verifyState(char[][] board){
+    public boolean verifyState(char[][] board) {
         //call every check function, if any of them have a winner, the game is in terminal state
-        String winner = checkHorizontal(board);
-        if(winner != null){
+        String state = checkHorizontal(board);
+        if (state != null) {
             return true;
         }
 
-        winner = checkVertical(board);
-        if(winner != null){
+        state = checkVertical(board);
+        if (state != null) {
             return true;
         }
 
-        winner = checkDiagonal(board);
-        if(winner != null){
+        state = checkDiagonal(board);
+        if (state != null) {
             return true;
         }
 
-        if(checkFullBoard(board)){
+        if (checkFullBoard(board)) {
             return true;
         }
         return false;
     }
 
+    public String checkWinner(char[][] board) {
+        String winner = checkHorizontal(board);
+        if (winner != null) {
+            return winner;
+        }
+
+        winner = checkVertical(board);
+        if (winner != null) {
+            return winner;
+        }
+
+        winner = checkDiagonal(board);
+        if (winner != null) {
+            return winner;
+        }
+
+        if (checkFullBoard(board)) {
+            return "draw";
+        }
+        return null;
+    }
 }
