@@ -44,8 +44,7 @@ public class Minimax {
     public int[] selectedAction(Board board){
         int possibleActionsNum = actions(board).size();
         ArrayList<int[]> possibleActions = actions(board);
-        ArrayList<Integer> recordedActions = new ArrayList<Integer>();
-
+        ArrayList<Integer> recordedActions = new ArrayList<>();
 
         int minmax;
         for (int action = 0; action < possibleActionsNum; action++) {
