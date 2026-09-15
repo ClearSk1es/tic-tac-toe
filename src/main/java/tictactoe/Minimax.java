@@ -4,20 +4,15 @@ import java.util.ArrayList;
 
 public class Minimax {
 
-    Board board;
     private final char MAX_PLAYER = 'X';
     private final char MIN_PLAYER = 'O';
-
 
     public Minimax() {
     }
 
-    public Minimax(Board board) {
-        this.board = board;
-    }
-
+    //Evaluation decision
     public int minimax(Board board) {
-        int value = -3;
+        int value = 0;
         char[][] state = board.getState();
         char currentPlayer = player(board);
 
@@ -44,6 +39,22 @@ public class Minimax {
         }
 
         return value;
+    }
+
+    public int[] selectedAction(Board board){
+        int possibleActions = actions(board).size();
+        int [] recordedAction = {0};
+
+        for (int action = 0; action < possibleActions; action++) {
+            int minmax = minimax(result(board, actions(board).get(action)));
+            if (minmax == -1){
+                //returning recorded action
+                return actions(board).get(action);
+            } else if (minmax == 0) {
+                return actions(board).get(action);
+            }
+        }
+        return recordedAction;
     }
 
     public int stateValue(Board board){

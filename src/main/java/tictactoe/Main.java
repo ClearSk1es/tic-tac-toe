@@ -17,6 +17,7 @@ public class Main {
 
         //Creating 2d array
         Board board = new Board();
+        Minimax minmax = new Minimax();
 
         boolean terminalState = false;
 
@@ -25,44 +26,51 @@ public class Main {
         board.printBoard(board.getState());
 
         while(!terminalState){
+            //state current board
+            char[][] boardState = board.getState();
+
             System.out.println("Current turn is: " + currPlayer);
-            System.out.println("Choose a position (1-9): ");
-            int position = input.nextInt();
+            if (currPlayer == 'X') {
+                System.out.println("Choose a position (1-9): ");
+                int position = input.nextInt();
 
 
-            //validating position inputed by user
-            boolean validPosition;
-            if (position < 1 || position > 9){
-                validPosition = false;
-            }else {
-                validPosition = true;
-            }
-            //if not valid position, do a loop asking for correct value
-            while(!(validPosition)){
-                System.out.println("The number is not valid, please try another one ");
-                position = input.nextInt();
-                if(position >= 1 && position <= 9){
+                //validating position inputed by user
+                boolean validPosition;
+                if (position < 1 || position > 9) {
+                    validPosition = false;
+                } else {
                     validPosition = true;
                 }
-            }
-
-            if(validPosition){
-                //Obteniendo el valor de la fila a partir de operacion con input de usuario
-                int row = (int)((position - 1) / 3);
-                //Obteniendo el valor de la columna a partir de operacion con input de usuario
-                int col = (position - 1) % 3;
-
-                //validation of cells not already used.
-                if (board.getState()[row][col] != ' '){
-                    System.out.println("Position is already being used. Try another position");
-                    continue;
+                //if not valid position, do a loop asking for correct value
+                while (!(validPosition)) {
+                    System.out.println("The number is not valid, please try another one ");
+                    position = input.nextInt();
+                    if (position >= 1 && position <= 9) {
+                        validPosition = true;
+                    }
                 }
-                else {
-                    //asigning an X or O to an available spot
-                    board.setState(row, col, currPlayer);
+
+                if (validPosition) {
+                    //Obteniendo el valor de la fila a partir de operacion con input de usuario
+                    int row = (int) ((position - 1) / 3);
+                    //Obteniendo el valor de la columna a partir de operacion con input de usuario
+                    int col = (position - 1) % 3;
+
+                    //validation of cells not already used.
+                    if (boardState[row][col] != ' ') {
+                        System.out.println("Position is already being used. Try another position");
+                        continue;
+                    } else {
+                        //asigning an X or O to an available spot
+                        board.setState(row, col, currPlayer);
+                    }
                 }
             }
-
+            else if (currPlayer == 'O'){
+                int[] recordedAction = minmax.selectedAction(board);
+                board.setState(recordedAction[0], recordedAction[1],currPlayer);
+            }
             //valid change of players is only if inputed valid position for value
             if (currPlayer == 'X'){
                 currPlayer = 'O';
@@ -71,12 +79,18 @@ public class Main {
             }
 
             //Printing updated board on console:
-            board.printBoard(board.getState());
+            board.printBoard(boardState);
 
             //testing terminal state
             System.out.println();
-            terminalState = board.verifyState(board.getState());
-
+            terminalState = board.verifyState(boardState);
+        }
+        String winner = board.checkWinner(board.getState());
+        if (!("draw".equals(winner))){
+            System.out.println("The winner is " + winner);
+        }
+        else{
+            System.out.println("It's a draw");
         }
 
     }
