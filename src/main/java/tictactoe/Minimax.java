@@ -43,18 +43,23 @@ public class Minimax {
 
     public int[] selectedAction(Board board){
         int possibleActions = actions(board).size();
-        int [] recordedAction = {0};
+        ArrayList<Integer> recordedActions = new ArrayList<Integer>();
 
+        int minmax;
         for (int action = 0; action < possibleActions; action++) {
-            int minmax = minimax(result(board, actions(board).get(action)));
-            if (minmax == -1){
-                //returning recorded action
-                return actions(board).get(action);
-            } else if (minmax == 0) {
-                return actions(board).get(action);
+            minmax= minimax(result(board, actions(board).get(action)));
+            recordedActions.add(minmax);
+        }
+
+        int bestValue = recordedActions.getFirst();
+        int bestActionIndex = 0;
+        for (int action = 0; action < possibleActions; action++) {
+            if (recordedActions.get(action) < bestValue){
+                bestValue = recordedActions.get(action);
+                bestActionIndex = action;
             }
         }
-        return recordedAction;
+        return actions(board).get(bestActionIndex);
     }
 
     public int stateValue(Board board){
