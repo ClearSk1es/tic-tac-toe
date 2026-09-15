@@ -10,12 +10,13 @@ public class Minimax {
     public Minimax() {
     }
 
-    //Evaluation decision
+    //Evaluation function
     public int minimax(Board board) {
         int value = 0;
         char[][] state = board.getState();
         char currentPlayer = player(board);
 
+        //If it's a terminal state returns true
         if (board.verifyState(state)) {
             return stateValue(board);
         }
@@ -41,12 +42,14 @@ public class Minimax {
         return value;
     }
 
+    //Retrieve action taken to reach beneficial terminal state for AI player
     public int[] selectedAction(Board board){
         int possibleActionsNum = actions(board).size();
         ArrayList<int[]> possibleActions = actions(board);
         ArrayList<Integer> recordedActions = new ArrayList<>();
 
         int minmax;
+        //Retrieve each minimax value for each possible action taken on current state
         for (int action = 0; action < possibleActionsNum; action++) {
             minmax= minimax(result(board, possibleActions.get(action)));
             recordedActions.add(minmax);
@@ -55,6 +58,7 @@ public class Minimax {
         int bestValue = recordedActions.getFirst();
         int bestActionIndex = 0;
         for (int action = 0; action < possibleActionsNum; action++) {
+            //Get the best possible action in current state for AI player
             if (recordedActions.get(action) < bestValue){
                 bestValue = recordedActions.get(action);
                 bestActionIndex = action;
@@ -117,7 +121,7 @@ public class Minimax {
     }
 
     public ArrayList<int[]> actions(Board board){
-        //Using arraylist as the length of the collection will depend on state
+        //Using arraylist because the length of the collection will depend on state
         ArrayList<int[]> possibleActions =new ArrayList<>();
         char[][] state = board.getState();
 
@@ -139,7 +143,7 @@ public class Minimax {
         char[][] state = board.getState();
         Board copyBoard = new Board();
 
-        //assigning a new value in action-position to presented state
+        //Relating the action taken array to it's respective row, col values
         int row = action[0];
         int column = action[1];
         //create a copy of the evaluating array as to not affect the original one

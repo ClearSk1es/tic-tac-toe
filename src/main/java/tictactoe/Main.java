@@ -52,9 +52,9 @@ public class Main {
                 }
 
                 if (validPosition) {
-                    //Obteniendo el valor de la fila a partir de operacion con input de usuario
+                    //Obtaining the value of row
                     int row = (int) ((position - 1) / 3);
-                    //Obteniendo el valor de la columna a partir de operacion con input de usuario
+                    //Obtaining the value of column
                     int col = (position - 1) % 3;
 
                     //validation of cells not already used.
@@ -62,7 +62,7 @@ public class Main {
                         System.out.println("Position is already being used. Try another position");
                         continue;
                     } else {
-                        //asigning an X or O to an available spot
+                        //Asigning an X
                         board.setState(row, col, currPlayer);
                     }
                 }
@@ -71,7 +71,7 @@ public class Main {
                 int[] recordedAction = minmax.selectedAction(board);
                 board.setState(recordedAction[0], recordedAction[1],currPlayer);
             }
-            //valid change of players is only if inputed valid position for value
+            //Valid change of players is only if inputed valid position for value
             if (currPlayer == 'X'){
                 currPlayer = 'O';
             } else {
